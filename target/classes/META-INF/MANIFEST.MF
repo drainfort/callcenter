@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: callcenter
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: ja_ro
+Implementation-Vendor-Id: com.callcenter
+Build-Jdk: 1.8.0_171
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/callcenter
+Created-By: Maven Integration for Eclipse
+
