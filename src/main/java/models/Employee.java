@@ -81,7 +81,7 @@ public abstract class Employee implements IEmployee, Comparable<IEmployee>{
 			a = 0;
 		}
 		else {
-			if(getPosition()< employee.getPosition()) {
+			if(getPosition()<employee.getPosition()) {
 				a = -1;
 			}
 			else if(getPosition()> employee.getPosition()) {

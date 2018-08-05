@@ -26,5 +26,10 @@ public interface IDispatcher {
 	 * @param employees List of employees to add 
 	 */
 	public void addEmployees(List<IEmployee> employees);
+	/**
+	 * Get number of processed Calls
+	 * @return processed calls
+	 */
+	public int getProcessedCalls();
 
 }

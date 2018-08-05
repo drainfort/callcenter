@@ -1,0 +1,52 @@
+Clase principal de la aplicación:
+
+src/main/java/app/Callcenter.java 
+
+Data:
+
+Archivo con la información de los empleados del callcenter, se estan cargando al iniciar la aplicación.
+Actualmente hay 5 empleados 3 operadores(position=0), 1  supervisor(position=1) y 1 director(position=2). 
+Si se requiere modificar la cantidad, modificar este archivo.
+ 
+src/main/resources/data/operator.json
+
+Configuración:
+
+Se estan usando dos queues. Una para las llamadas y una para los empleados disponibles.
+El tamaño de la queue de las llamadas viene configurada en el archivo src/main/resources/app.properties
+Actualmente tiene un tamaño de 15 llamadas, si se quiere disminuir o ampliar el tamaño de esta modificar este archivo.
+
+Endpoints:
+
+La aplicación tiene dos endpoints:
+/   			El indice con un mensaje de bienvenida
+/call/attend    Para que el callcenter atienda llamadas. Este endpoint tiene un parametro opcional calls, para definir el número de llamadas que se tiene que atender.
+
+
+Explicación solución:
+
+Cuando se empieza la aplicación la clase Dispatcher arranca un thread para leer de la BlockingQueue de las llamadas (startProcesing). 
+Esto quiere decir que el thread esta bloqueado hasta que llega una llamada al sistema. Cuando una llamada el llega se trata de
+obtener un empleado disponible de la PriorityBlockingQueue(Ordenado segun método compareTo de clase Employee), si no hay empleados 
+disponibles el thread queda bloqueado hasta que haya uno disponible. En caso contrario se crea un thread para que el empleado procese 
+la llamada, al terminar de procesar la llamada el empleado se vuelve a adicionar a la queue de empleados. 
+
+Plus/Extra
+
+Dar	alguna solución	sobre qué pasa con una llamada cuando no hay ningún	empleado libre:
+
+Como lo dije en la explicación anterior el thread que lee de la cola de llamadas se bloquea hasta que haya uno disponible ya que se
+está usando una PriorityBlockingQueue donde se manejan los empleados disponibles si no hay empleados disponible cuando se llama al
+método take bloquea el thread donde se esta corriendo.
+
+Dar	alguna solución sobre qué pasa con una llamada cuando entran más de	10 llamadas	concurrentes:
+
+Todas las llamadas que entran al callcenter entran a una BlockingQueue y el tamaño de esta es configurable. Si llegan más de 10 llamadas
+y el tamaño de la cola es mayor a 10 se guardan en la cola hasta que se puedan procesar. Si llegan llamadas mayor a la capacidad de 
+la cola de llamadas el endpoint /call/attend notifica al usuario que la cola esta llena y no se pueden procesar más llamadas, hasta que
+el espacio de la cola sea liberado. 
+
+
+
+
+ 

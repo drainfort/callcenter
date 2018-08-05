@@ -29,6 +29,11 @@ public class Dispatcher implements IDispatcher{
 	 * Priority Queue for employees
 	 */
 	private PriorityBlockingQueue<IEmployee> employesQueue = new PriorityBlockingQueue<IEmployee>();
+	/**
+	 * Number of processedCalls
+	 */
+	private int processedCalls = 0;
+   
 	
 	/**
 	 * Constructor of the class
@@ -70,6 +75,7 @@ public class Dispatcher implements IDispatcher{
 	 */
 	public void dispatchCall (Call call) throws InterruptedException{
 		IEmployee employee = employesQueue.take();
+		System.out.println(call.getDuration()+ " "+employee.getName()+" "+employee.getPosition());
 		Thread thread = new Thread(() -> {
 	        try {
 	            processCall(call, employee);
@@ -88,10 +94,10 @@ public class Dispatcher implements IDispatcher{
 	 */
 	private void processCall(Call call, IEmployee employee) {
 		try {
-			System.out.println(call.getDuration()+ " "+employee.getName());
 			employee.setBusy(true);
 			TimeUnit.SECONDS.sleep(call.getDuration());
 			employee.setBusy(false);
+			incrementProcessedCalls();
 			employesQueue.add(employee);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -105,5 +111,20 @@ public class Dispatcher implements IDispatcher{
 	public void addEmployees(List<IEmployee> employees) {
 		employesQueue.addAll(employees);
 	}
+	
+	/**
+	 * Increment the counter of processedCalls
+	 */
+	private synchronized void incrementProcessedCalls() {
+    	processedCalls = processedCalls + 1;
+    }
+
+	/**
+	 * Get number of processed Calls
+	 * @return processed calls
+	 */
+    public int getProcessedCalls() {
+        return processedCalls;
+    }
 
 }
